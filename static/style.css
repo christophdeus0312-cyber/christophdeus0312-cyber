@@ -1,0 +1,8 @@
+/* Simple CRT-style theme for small displays */
+html,body{height:100%;margin:0;background:#000;color:#a8ff9e;font-family:monospace}
+#viewport{display:flex;flex-direction:column;gap:6px;padding:8px}
+.panel{background:rgba(0,0,0,0.4);padding:6px;border:1px solid rgba(160,255,150,0.08)}
+.large{font-size:28px;text-align:center}
+.panel small{color:#cfe8d0}
+/* optional scanline effect */
+body::after{content:'';pointer-events:none;position:fixed;left:0;top:0;right:0;bottom:0;background-image:linear-gradient(rgba(0,0,0,0.06) 50%, rgba(0,0,0,0) 50%);background-size:100% 4px;mix-blend-mode:overlay}

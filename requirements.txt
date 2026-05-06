@@ -1,0 +1,5 @@
+flask
+requests
+feedparser
+ics
+python-dateutil

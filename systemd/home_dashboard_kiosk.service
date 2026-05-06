@@ -1,0 +1,15 @@
+[Unit]
+Description=Home Dashboard CRT - Kiosk
+After=graphical.target
+Wants=graphical.target
+
+[Service]
+User=@RUN_USER@
+Environment=DISPLAY=:0
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/chromium-browser --kiosk --noerrdialogs --disable-infobars --incognito http://localhost:5000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target

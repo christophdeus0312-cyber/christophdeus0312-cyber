@@ -1,0 +1,35 @@
+{
+  "city": "Hamburg",
+  "timezone": "Europe/Berlin",
+  "home_assistant": {
+    "url": "http://homeassistant.local:8123",
+    "token": "YOUR_LONG_LIVED_ACCESS_TOKEN",
+    "calendar_entity": "calendar.your_google_calendar"
+  },
+  "google_calendar": {
+    "ics_url": ""
+  },
+  "news": {
+    "sources": [
+      {
+        "type": "rss",
+        "url": "https://rss.example.com/feed.xml"
+      }
+    ],
+    "max_headlines": 3,
+    "refresh_minutes": 30
+  },
+  "fun": {
+    "widget": "headlines",
+    "max_items": 3
+  },
+  "kiosk": {
+    "port": 5000,
+    "refresh_interval_seconds": 60
+  },
+  "display": {
+    "theme": "crt",
+    "crt_scanlines": true,
+    "font_scale": 1.0
+  }
+}
