@@ -1,18 +1,42 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Home Dashboard CRT</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
-<body>
-  <div id="viewport">
-    <div id="time" class="panel large">—</div>
-    <div id="weather" class="panel">Weather: —</div>
-    <div id="calendar" class="panel">Calendar: —</div>
-    <div id="headlines" class="panel">Headlines: —</div>
-  </div>
+<body class="crt">
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <header id="header">
+    <h1 class="neon">HOME DASH</h1>
+    <div id="clock" class="clock">--:--:--</div>
+  </header>
+
+  <main id="viewport">
+    <section id="weather" class="panel panel-large">
+      <div class="panel-title">WEATHER</div>
+      <div class="panel-body">—</div>
+    </section>
+
+    <section id="calendar" class="panel">
+      <div class="panel-title">CALENDAR</div>
+      <div class="panel-body">—</div>
+    </section>
+
+    <section id="headlines" class="panel">
+      <div class="panel-title">HEADLINES</div>
+      <div class="panel-body">—</div>
+    </section>
+  </main>
+
+  <footer id="footer">
+    <div class="credit">Retro 80s neon theme • small screen friendly</div>
+  </footer>
+
   <script src="/static/app.js"></script>
 </body>
 </html>

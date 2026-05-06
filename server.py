@@ -10,7 +10,7 @@ import time
 import threading
 from datetime import datetime
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
 import feedparser
 from ics import Calendar
@@ -173,6 +173,36 @@ def api_weather():
         except Exception as exc:
             print('weather error', exc)
     return jsonify({})
+
+
+@app.route('/calibrate')
+def calibrate_page():
+    return app.send_static_file('calibrate.html')
+
+
+@app.route('/api/display', methods=['POST'])
+def api_display():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'no json'}), 400
+        # update in-memory config and persist
+        cfg = config if isinstance(config, dict) else {}
+        display = cfg.get('display', {})
+        display.update(data)
+        cfg['display'] = display
+        # write to CONFIG_PATH (create if missing)
+        try:
+            with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
+                json.dump(cfg, f, indent=2, ensure_ascii=False)
+        except Exception:
+            # fallback: write next to default
+            with open(os.path.join(APP_DIR, 'config.json'), 'w', encoding='utf-8') as f:
+                json.dump(cfg, f, indent=2, ensure_ascii=False)
+        return jsonify({'ok': True})
+    except Exception as exc:
+        print('display save error', exc)
+        return jsonify({'error': str(exc)}), 500
 
 
 if __name__ == '__main__':

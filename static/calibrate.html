@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Display Calibration</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#070012;color:#fff;padding:12px}
+    .box{background:rgba(255,255,255,0.03);padding:12px;border-radius:8px}
+    label{display:block;margin-top:8px}
+    .big{font-size:28px;color:#33fff3}
+    .small{font-size:12px;color:#ffd93d}
+    button{margin-top:12px;padding:8px 12px;background:#ff4da6;border:none;color:#000;border-radius:6px}
+  </style>
+</head>
+<body>
+  <h2>Display Calibration</h2>
+  <div class="box">
+    <div id="info">Measuring...</div>
+    <pre id="result"></pre>
+    <label>UI scale: <input id="scale" type="range" min="0.6" max="1.6" step="0.05" value="1"> <span id="scaleVal">1.00</span></label>
+    <button id="save">Save display settings to config</button>
+  </div>
+
+  <script>
+    const info = document.getElementById('info');
+    const result = document.getElementById('result');
+    const scale = document.getElementById('scale');
+    const scaleVal = document.getElementById('scaleVal');
+
+    scale.addEventListener('input', ()=>{ scaleVal.textContent = parseFloat(scale.value).toFixed(2); });
+
+    function measureHz(duration=1500){
+      return new Promise(resolve=>{
+        let frames=0; let start=performance.now();
+        function cb(ts){
+          frames++;
+          if(ts-start >= duration){
+            const avg = (ts-start)/frames;
+            resolve(1000/avg);
+          } else {
+            requestAnimationFrame(cb);
+          }
+        }
+        requestAnimationFrame(cb);
+      });
+    }
+
+    (async function(){
+      const screenW = screen.width, screenH = screen.height;
+      const innerW = innerWidth, innerH = innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      const hz = Math.round(await measureHz(1200));
+      info.innerHTML = `<div class="big">${screenW}×${screenH}</div><div class="small">inner ${innerW}×${innerH} • dpr ${dpr} • ~${hz} Hz</div>`;
+      const payload = {width: screenW, height: screenH, innerWidth: innerW, innerHeight: innerH, devicePixelRatio: dpr, measuredHz: hz, font_scale: parseFloat(scale.value)};
+      result.textContent = JSON.stringify(payload, null, 2);
+
+      document.getElementById('save').addEventListener('click', async ()=>{
+        const p = Object.assign({}, payload, {font_scale: parseFloat(scale.value)});
+        const res = await fetch('/api/display', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+        if(res.ok) alert('Saved to config.json'); else alert('Save failed');
+      });
+    })();
+  </script>
+</body>
+</html>
